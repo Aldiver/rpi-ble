@@ -4,10 +4,10 @@ from typing import Any, Dict, List
 import dbus
 from gi.repository import GObject
 
-from demo.core_ble.constants import DBUS_PROP_IFACE, GATT_CHRC_IFACE
-from demo.core_ble.descriptor import Descriptor
-from demo.exceptions import InvalidArgsException
-from demo.util import byte_arr_to_str, str_to_byte_arr
+from gattservice.core_ble.constants import DBUS_PROP_IFACE, GATT_CHRC_IFACE
+from gattservice.core_ble.descriptor import Descriptor
+from gattservice.exceptions import InvalidArgsException
+from gattservice.util import byte_arr_to_str, str_to_byte_arr
 
 
 class Characteristic(dbus.service.Object):

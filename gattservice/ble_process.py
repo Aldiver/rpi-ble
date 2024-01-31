@@ -70,12 +70,13 @@ class BLEProcess(Process):
             index=0,
             adapter_obj=adapter_obj,
             uuid="0000180d-aaaa-1000-8000-0081239b35fb",
-            name="RaspberryPi Service",
+            name="Thesis RPI0",
         )
 
         # Create the application and add the service to it
         app = Application(self._system_bus)
-
+        
+        #Sensor Service
         Sensor_Service = Service(
             bus=self._system_bus,
             index=0,
@@ -84,21 +85,34 @@ class BLEProcess(Process):
             output_queue=self._output_queue,
         )
 
+        Sensor_Service.add_characteristic(
+            "00000540-0000-1000-8000-00805f9b34fb", ["read", "notify"], "Pulse Characteristic", "Sample"
+        )
+
+        Sensor_Service.add_characteristic(
+            "00000541-0000-1000-8000-00805f9b34fb", ["read", "notify"], "BodyTemp Characteristic", "Sample"
+        )
+
+        Sensor_Service.add_characteristic(
+            "00000542-0000-1000-8000-00805f9b34fb", ["read", "notify"], "GSR Characteristic", "Sample"
+        )        
+        
+        Sensor_Service.add_characteristic(
+            "00000543-0000-1000-8000-00805f9b34fb", ["read", "notify"], "TempHumid Characteristic", "Sample"
+        )
+
+        #Alert Service
         Rasp_Service = Service(
             bus=self._system_bus,
             index=1,
-            uuid="1000180d-aaaa-1000-8000-0081239b35fb",
+            uuid="00001802-0000-1000-8000-00805f9b34fb",
             primary=True,
             output_queue=self._output_queue,
         )
-        
-        Sensor_Service.add_characteristic(
-            "f76ce016-952b-c6a8-e17c-c2c19aac7b1b", ["read", "notify"], "Data Reading Sample", "Sample Heart Rate"
+        Rasp_Service.add_characteristic(
+            "00002a06-0000-1000-8000-00805f9b34fb", ["write"], "Alert Characteristic", ""
         )
 
-        Rasp_Service.add_characteristic(
-            "00002a29-0000-1000-8000-00805f9b34fb", ["write"], "Receive Command?", ""
-        )
         app.add_service(Sensor_Service)
         app.add_service(Rasp_Service)
 

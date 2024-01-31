@@ -3,10 +3,10 @@ from typing import Any, Dict, List
 
 import dbus
 
-from demo.core_ble.characteristic import Characteristic
-from demo.core_ble.constants import DBUS_PROP_IFACE, GATT_SERVICE_IFACE
-from demo.exceptions import InvalidArgsException
-from demo.util import check_flags
+from gattservice.core_ble.characteristic import Characteristic
+from gattservice.core_ble.constants import DBUS_PROP_IFACE, GATT_SERVICE_IFACE
+from gattservice.exceptions import InvalidArgsException
+from gattservice.util import check_flags
 
 
 class Service(dbus.service.Object):

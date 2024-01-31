@@ -2,12 +2,12 @@ from typing import Dict, Union
 
 import dbus
 
-from demo.core_ble.constants import (
+from gattservice.core_ble.constants import (
     DBUS_PROP_IFACE,
     LE_ADVERTISEMENT_IFACE,
     LE_ADVERTISING_MANAGER_IFACE,
 )
-from demo.exceptions import AdvertisementException, InvalidArgsException
+from gattservice.exceptions import AdvertisementException, InvalidArgsException
 
 
 def register_ad_cb():
@@ -38,7 +38,7 @@ class Advertisement(dbus.service.Object):
     org.bluez.LEAdvertisement1 interface implementation
     """
 
-    PATH_BASE = "/org/bluez/pycon_demo/advertisement"
+    PATH_BASE = "/org/bluez/pycon_gattservice/advertisement"
 
     def __init__(self, bus, index, adapter_obj, uuid, name):
         self.path = self.PATH_BASE + str(index)

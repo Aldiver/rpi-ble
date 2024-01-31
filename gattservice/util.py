@@ -2,7 +2,7 @@ from typing import List, Optional
 
 import dbus
 
-from demo.core_ble.constants import (
+from gattservice.core_ble.constants import (
     BLUEZ_SERVICE_NAME,
     DBUS_OM_IFACE,
     GATT_MANAGER_IFACE,

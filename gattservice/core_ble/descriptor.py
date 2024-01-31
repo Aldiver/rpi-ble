@@ -2,9 +2,9 @@ from typing import Any, Dict
 
 import dbus
 
-from demo.core_ble.constants import DBUS_PROP_IFACE, GATT_DESC_IFACE
-from demo.exceptions import InvalidArgsException
-from demo.util import str_to_byte_arr
+from gattservice.core_ble.constants import DBUS_PROP_IFACE, GATT_DESC_IFACE
+from gattservice.exceptions import InvalidArgsException
+from gattservice.util import str_to_byte_arr
 
 
 class Descriptor(dbus.service.Object):
