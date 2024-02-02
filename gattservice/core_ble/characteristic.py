@@ -1,6 +1,6 @@
 import queue
 from typing import Any, Dict, List
-
+import random
 import dbus
 from gi.repository import GObject
 
@@ -29,7 +29,7 @@ class Characteristic(dbus.service.Object):
         self.input_queue = input_queue
         self.output_queue = output_queue
         self.notification_timeout_id = None
-
+        # self.notifying = False
         if "notify" in self.flags:
             self.notifying = True
         else:
@@ -57,14 +57,15 @@ class Characteristic(dbus.service.Object):
         Callback function for the input queue. This function is called every 10ms to check if there is a new value in the input queue.
         If there is a new value, it is written to the characteristic and a PropertiesChanged signal is emitted.
         """
-
-        try:
-            curr_value = self.input_queue.get(False)
-        except queue.Empty:
-            return self.notifying
-
-        self.value = str_to_byte_arr(str(curr_value))
+        # try:
+        #     print("input queue callback")
+        #     curr_value = self.input_queue.get(False)
+        # except queue.Empty:
+        #     return self.notifying
+        print("input queue callback")
+        self.value = str_to_byte_arr(str(random.randint(1000, 5000)))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.value}, [])
+        return self.notifying
 
     def get_path(self) -> dbus.ObjectPath:
         """ "
@@ -138,11 +139,13 @@ class Characteristic(dbus.service.Object):
         """
         Set the characteristic to notifying.
         """
-        if self.notifying:
-            return
-
-        self.notifying = True
-        self.notification_timeout_id = GObject.timeout_add(10, self.input_queue_callback)
+        # print("Start Notify")
+        # if self.notifying:
+        #     print("notify - early return")
+        #     return
+        print("notify - continue")
+        self.notifying = True        
+        self.notification_timeout_id = GObject.timeout_add(1000, self.input_queue_callback)
 
     @dbus.service.method(GATT_CHRC_IFACE)
     def StopNotify(self):
@@ -152,3 +155,8 @@ class Characteristic(dbus.service.Object):
 
         self.notifying = False
         GObject.source_remove(self.notification_timeout_id)
+    
+    @dbus.service.signal(DBUS_PROP_IFACE, signature='sa{sv}as')
+    def PropertiesChanged(self, interface, changed, invalidated):
+        pass
+

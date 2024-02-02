@@ -12,43 +12,19 @@ class Application(dbus.service.Object):
     """
 
     def __init__(self, system_bus: dbus.SystemBus) -> None:
-        """
-        Constructor of application class. Set own path and initialize services variable.
-
-        Args:
-            system_bus (dbus.SystemBus): system bus object
-        """
         self.path = "/"
         self.services = []
 
         dbus.service.Object.__init__(self, system_bus, self.path)
 
     def get_path(self) -> str:
-        """
-        Get dbus object path for given input path.
-
-        Returns:
-            str: dbus object path
-        """
         return dbus.ObjectPath(self.path)
 
     def add_service(self, service: Service) -> None:
-        """
-        Add service to application.
-
-        Args:
-            service (Service): service to add
-        """
         self.services.append(service)
-
+    
     @dbus.service.method(DBUS_OM_IFACE, out_signature="a{oa{sa{sv}}}")
     def GetManagedObjects(self) -> Dict[str, dbus.ObjectPath]:
-        """
-        Overwrite GetManagedObjects to add all characteristics of the added services.
-
-        Returns:
-            Dict[str, dbus.ObjectPath]: all managed objects of this application
-        """
         response = {}
 
         for service in self.services:

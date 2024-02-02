@@ -28,12 +28,6 @@ class Service(dbus.service.Object):
         self.output_queue = output_queue
 
     def get_properties(self) -> Dict[str, Dict[str, Any]]:
-        """
-        Returns the properties of the service.
-
-        Returns:
-            Dict[str, Dict[str, Any]]: The properties of the service.
-        """
         return {
             GATT_SERVICE_IFACE: {
                 "UUID": self.uuid,
@@ -43,24 +37,9 @@ class Service(dbus.service.Object):
         }
 
     def get_path(self) -> dbus.ObjectPath:
-        """
-        Returns the path of the service.
-
-        Returns:
-            dbus.ObjectPath: The path of the service.
-        """
         return dbus.ObjectPath(self.path)
 
     def add_characteristic(self, uuid: str, flags: List[str], description: str, default_value: Any):
-        """
-        Adds a characteristic to the service.
-
-        Args:
-            uuid (str): The UUID of the characteristic.
-            flags (List[str]): The flags of the characteristic.
-            description (str): The description of the characteristic.
-            default_value (Any): The default value of the characteristic.
-        """
         check_flags(flags)
 
         self.characteristic_queues[uuid] = queue.Queue()
@@ -80,22 +59,9 @@ class Service(dbus.service.Object):
         self.characteristics.append(characteristic)
 
     def write_to_characteristic(self, value: Any, uuid: str):
-        """
-        Writes a value to a specified characteristic.
-
-        Args:
-            value (Any): The value to write to the characteristic.
-            uuid (str): The UUID of the characteristic to write to.
-        """
         self.characteristic_queues[uuid].put(value)
 
     def get_characteristic_paths(self) -> List[dbus.ObjectPath]:
-        """
-        Returns the paths of the characteristics.
-
-        Returns:
-            List[dbus.ObjectPath]: The paths of the characteristics.
-        """
         result = []
         for characteristic in self.characteristics:
             result.append(characteristic.get_path())

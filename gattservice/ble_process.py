@@ -34,16 +34,10 @@ class BLEProcess(Process):
         self._output_queue = output_queue
 
     def _shutdown_handler(self, sig: enum, frame: enum) -> None:
-        """
-        Handler that stops the main loop and stop the advertisements.
-        """
         self._mainloop.quit()
         self._advertisement.release()
 
     def run(self) -> None:
-        """
-        The main run function that set-ups the BLE service.
-        """
 
         # The mainloop initialized here handles the asynchronous communication over dbus documentation can be found
         # here: https://docs.gtk.org/glib/main-loop.html
@@ -86,19 +80,19 @@ class BLEProcess(Process):
         )
 
         Sensor_Service.add_characteristic(
-            "00000540-0000-1000-8000-00805f9b34fb", ["read", "notify"], "Pulse Characteristic", "Sample"
+            "00000540-0000-1000-8000-00805f9b34fb", ["read", "notify"], "Pulse Characteristic", "Heart Rate"
         )
 
         Sensor_Service.add_characteristic(
-            "00000541-0000-1000-8000-00805f9b34fb", ["read", "notify"], "BodyTemp Characteristic", "Sample"
+            "00000541-0000-1000-8000-00805f9b34fb", ["read", "notify"], "BodyTemp Characteristic", "35"
         )
 
         Sensor_Service.add_characteristic(
-            "00000542-0000-1000-8000-00805f9b34fb", ["read", "notify"], "GSR Characteristic", "Sample"
+            "00000542-0000-1000-8000-00805f9b34fb", ["read", "notify"], "GSR Characteristic", "232"
         )        
         
         Sensor_Service.add_characteristic(
-            "00000543-0000-1000-8000-00805f9b34fb", ["read", "notify"], "TempHumid Characteristic", "Sample"
+            "00000543-0000-1000-8000-00805f9b34fb", ["read", "notify"], "TempHumid Characteristic", "37"
         )
 
         #Alert Service
@@ -110,7 +104,7 @@ class BLEProcess(Process):
             output_queue=self._output_queue,
         )
         Rasp_Service.add_characteristic(
-            "00002a06-0000-1000-8000-00805f9b34fb", ["write"], "Alert Characteristic", ""
+            "00002a06-0000-1000-8000-00805f9b34fb", ["write", "notify"], "Alert Characteristic", ""
         )
 
         app.add_service(Sensor_Service)

@@ -55,9 +55,6 @@ class Advertisement(dbus.service.Object):
         dbus.service.Object.__init__(self, bus, self.path)
 
     def init_advertisement(self):
-        """
-        Sets up and register the advertisement for the GATT server.
-        """
         ad_manager = dbus.Interface(self.adapter_obj, LE_ADVERTISING_MANAGER_IFACE)
 
         ad_manager.RegisterAdvertisement(

@@ -1,11 +1,14 @@
 from typing import Any, Dict
 
 import dbus
+import dbus.exceptions
 
 from gattservice.core_ble.constants import DBUS_PROP_IFACE, GATT_DESC_IFACE
 from gattservice.exceptions import InvalidArgsException
 from gattservice.util import str_to_byte_arr
 
+class NotSupportedException(dbus.exceptions.DBusException):
+    _dbus_error_name = "org.bluez.Error.NotSupported"
 
 class Descriptor(dbus.service.Object):
     """
@@ -15,7 +18,7 @@ class Descriptor(dbus.service.Object):
     def __init__(self, bus, index, characteristic, description):
         self.path = characteristic.path + "/desc" + str(index)
         self.bus = bus
-        self.uuid = "2901"
+        self.uuid = "2902"
         self.flags = ["read"]
         self.characteristic = characteristic
         dbus.service.Object.__init__(self, bus, self.path)
@@ -78,3 +81,8 @@ class Descriptor(dbus.service.Object):
             Any: The value of the descriptor.
         """
         return self.value
+        
+    @dbus.service.method(GATT_DESC_IFACE, in_signature='aya{sv}')
+    def WriteValue(self, value, options):
+        print('Default WriteValue called, returning error')
+        raise NotSupportedException()
