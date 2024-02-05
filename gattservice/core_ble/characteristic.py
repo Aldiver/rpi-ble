@@ -15,7 +15,7 @@ class Characteristic(dbus.service.Object):
     org.bluez.GattCharacteristic1 interface implementation.
     """
 
-    def __init__(self, bus, index, uuid, flags, service, description, default_value, input_queue, output_queue):
+    def __init__(self, bus, index, uuid, flags, service, description, default_value, input_queue):
         self.path = service.path + "/char" + str(index)
         self.bus = bus
         self.uuid = uuid
@@ -27,13 +27,12 @@ class Characteristic(dbus.service.Object):
 
         self.value = str_to_byte_arr(default_value)
         self.input_queue = input_queue
-        self.output_queue = output_queue
         self.notification_timeout_id = None
         # self.notifying = False
         if "notify" in self.flags:
-            self.notifying = True
-        else:
             self.notifying = False
+        else:
+            self.notifying = True
 
     def get_properties(self) -> Dict[str, Dict[str, Any]]:
         """ "
@@ -53,18 +52,15 @@ class Characteristic(dbus.service.Object):
         }
 
     def input_queue_callback(self):
-        """
-        Callback function for the input queue. This function is called every 10ms to check if there is a new value in the input queue.
-        If there is a new value, it is written to the characteristic and a PropertiesChanged signal is emitted.
-        """
-        # try:
-        #     print("input queue callback")
-        #     curr_value = self.input_queue.get(False)
-        # except queue.Empty:
-        #     return self.notifying
-        print("input queue callback")
-        self.value = str_to_byte_arr(str(random.randint(1000, 5000)))
+        try:
+            curr_value = self.input_queue.get(False)
+            print(curr_value)
+        except queue.Empty:
+            return self.notifying
+        
+        self.value = str_to_byte_arr(str(curr_value))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.value}, [])
+
         return self.notifying
 
     def get_path(self) -> dbus.ObjectPath:
@@ -132,20 +128,15 @@ class Characteristic(dbus.service.Object):
         Writes a value to the characteristic.
         """
         self.value = value
-        self.output_queue.put({"uuid": self.uuid, "value": byte_arr_to_str(value)})
+        # self.output_queue.put({"uuid": self.uuid, "value": byte_arr_to_str(value)})
 
     @dbus.service.method(GATT_CHRC_IFACE)
     def StartNotify(self):
-        """
-        Set the characteristic to notifying.
-        """
-        # print("Start Notify")
-        # if self.notifying:
-        #     print("notify - early return")
-        #     return
-        print("notify - continue")
-        self.notifying = True        
-        self.notification_timeout_id = GObject.timeout_add(1000, self.input_queue_callback)
+        if self.notifying:
+            return
+
+        self.notifying = True
+        self.notification_timeout_id = GObject.timeout_add(2000, self.input_queue_callback)
 
     @dbus.service.method(GATT_CHRC_IFACE)
     def StopNotify(self):

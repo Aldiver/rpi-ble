@@ -6,29 +6,37 @@ import dbus
 import threading
 
 from gattservice.ble_process import BLEProcess
-from gattservice.random_data import generate_random_readings
-# from parser_node import Parser
+from gattservice.core_ble.constants import GSR_SENSOR_UUID, PULSE_SENSOR_UUID, TEMP_HUMI_SENSOR_UUID, BODY_TEMP_SENSOR_UUID, ALERT_NOTIF_UUID
+from sensorservice.sensor_process import SensorProcess
 
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-def test_func(interval, process):
-    threading.Timer(interval, test_func, [interval]).start()
-    print("Interval Test hmm")
+queue_manager = {}
+sensor_process = SensorProcess()
 
 def main():
-    output_queue = multiprocessing.Queue()
+    queue_manager[GSR_SENSOR_UUID] = multiprocessing.Queue()
+    queue_manager[PULSE_SENSOR_UUID] = multiprocessing.Queue()
+    queue_manager[TEMP_HUMI_SENSOR_UUID] = multiprocessing.Queue()  
+    queue_manager[BODY_TEMP_SENSOR_UUID] = multiprocessing.Queue()
+    queue_manager[ALERT_NOTIF_UUID] = multiprocessing.Queue()
 
-    ble_process = BLEProcess(output_queue)
+    output_queue = multiprocessing.Queue()
+    test = multiprocessing.Queue()
+    ble_process = BLEProcess(queue_manager)
     ble_process.start()
-    
+
+    start_time = time.time()  # Record the start time
     while True:
-        try:
-            # value = output_queue.put(generate_random_readings(), timeout=1000)
-            # Parser(output_queue)
-            curr_value = output_queue.get(timeout=1)
-            print(f"Value written to Characteristic with UUID {curr_value['uuid']}: {curr_value['value']}")
-        except queue.Empty:
-            time.sleep(1)
+        if time.time() - start_time >= 2:
+            start_time = time.time()  # Reset the timer
+            # Iterate over sensor UUIDs and add data to the queue if it's empty
+            for sensor_uuid in [GSR_SENSOR_UUID, PULSE_SENSOR_UUID, TEMP_HUMI_SENSOR_UUID, BODY_TEMP_SENSOR_UUID]:
+                if queue_manager[sensor_uuid].empty():
+                    print(f"Adding data to queue for sensor with UUID {sensor_uuid}")
+                    data = sensor_process.get_sensor_data(sensor_uuid)
+                    queue_manager[sensor_uuid].put(data)
+        time.sleep(0.1)  # Sleep for a short duration to avoid high CPU usage
 
 if __name__ == "__main__":
     main()

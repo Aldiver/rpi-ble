@@ -1,3 +1,4 @@
+import multiprocessing
 import queue
 from typing import Any, Dict, List
 
@@ -14,19 +15,16 @@ class Service(dbus.service.Object):
     org.bluez.GattService1 interface implementation
     """
 
-    PATH_BASE = "/org/bluez/example/service"
+    PATH_BASE = "/org/bluez/heatguard/service"
 
-    def __init__(self, bus, index, uuid, primary, output_queue):
+    def __init__(self, bus, index, uuid, primary):
         self.path = self.PATH_BASE + str(index)
         self.bus = bus
         self.uuid = uuid
         self.primary = primary
         self.characteristics = []
         dbus.service.Object.__init__(self, bus, self.path)
-
-        self.characteristic_queues = {}
-        self.output_queue = output_queue
-
+        
     def get_properties(self) -> Dict[str, Dict[str, Any]]:
         return {
             GATT_SERVICE_IFACE: {
@@ -39,10 +37,8 @@ class Service(dbus.service.Object):
     def get_path(self) -> dbus.ObjectPath:
         return dbus.ObjectPath(self.path)
 
-    def add_characteristic(self, uuid: str, flags: List[str], description: str, default_value: Any):
+    def add_characteristic(self, uuid: str, flags: List[str], description: str, default_value: Any, sensor_queue: multiprocessing.Queue):
         check_flags(flags)
-
-        self.characteristic_queues[uuid] = queue.Queue()
 
         characteristic = Characteristic(
             self.bus,
@@ -52,14 +48,14 @@ class Service(dbus.service.Object):
             self,
             description,
             default_value,
-            self.characteristic_queues[uuid],
-            self.output_queue,
+            sensor_queue,
         )
 
         self.characteristics.append(characteristic)
 
     def write_to_characteristic(self, value: Any, uuid: str):
-        self.characteristic_queues[uuid].put(value)
+        # self.characteristic_queues[uuid].put(value)
+        print(f"Writing to characteristic with UUID {uuid}: {value}")
 
     def get_characteristic_paths(self) -> List[dbus.ObjectPath]:
         result = []

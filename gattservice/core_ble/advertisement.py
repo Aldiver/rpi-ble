@@ -38,7 +38,7 @@ class Advertisement(dbus.service.Object):
     org.bluez.LEAdvertisement1 interface implementation
     """
 
-    PATH_BASE = "/org/bluez/pycon_gattservice/advertisement"
+    PATH_BASE = "/org/bluez/heatguard_gattservice/advertisement"
 
     def __init__(self, bus, index, adapter_obj, uuid, name):
         self.path = self.PATH_BASE + str(index)
@@ -71,12 +71,6 @@ class Advertisement(dbus.service.Object):
         self.Release()
 
     def get_properties(self) -> Dict[str, Union[dbus.Array, dbus.Boolean, dbus.Dictionary]]:
-        """
-        Create the dbus properties of the advertisement object.
-
-        Returns:
-            Dict[str, Union[dbus.Array, dbus.Boolean, dbus.Dictionary]]: properties of the advertisement
-        """
         properties = dict()
         properties["Type"] = self.ad_type
 
