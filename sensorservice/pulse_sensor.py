@@ -54,18 +54,18 @@ class PulseSensor():
 
         # Create byte array
         byte_array = dbus.Array([], signature=dbus.Signature("y"))
-        byte_array.append(dbus.byte(val1_bytes))
-        byte_array.append(dbus.byte(val2_bytes))
-        byte_array.append(dbus.byte(val3_bytes))
-        byte_array.append(dbus.byte(b'\x01'))  # Insert byte > 0
-        byte_array.append(dbus.byte(val4_bytes))
-        byte_array.append(dbus.byte(val4a_bytes))
-        byte_array.append(dbus.byte(b'\x01'))  # Insert byte > 0
-        byte_array.append(dbus.byte(val5_bytes))
-        byte_array.append(dbus.byte(val5a_bytes))
-        byte_array.append(dbus.byte(b'\x01'))  # Insert byte > 0
-        byte_array.append(dbus.byte(val6_bytes))
-        byte_array.append(dbus.byte(val6a_bytes))
+        byte_array.append(dbus.Byte(val1_bytes))
+        byte_array.append(dbus.Byte(val2_bytes))
+        byte_array.append(dbus.Byte(val3_bytes))
+        byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
+        byte_array.append(dbus.Byte(val4_bytes))
+        byte_array.append(dbus.Byte(val4a_bytes))
+        byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
+        byte_array.append(dbus.Byte(val5_bytes))
+        byte_array.append(dbus.Byte(val5a_bytes))
+        byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
+        byte_array.append(dbus.Byte(val6_bytes))
+        byte_array.append(dbus.Byte(val6a_bytes))
 
         # Print byte array
         print("\nByte array:")
