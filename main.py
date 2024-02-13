@@ -31,7 +31,7 @@ def main():
         if time.time() - start_time >= 2:
             start_time = time.time()  # Reset the timer
             # Iterate over sensor UUIDs and add data to the queue if it's empty
-            for sensor_uuid in [GSR_SENSOR_UUID, PULSE_SENSOR_UUID, TEMP_HUMI_SENSOR_UUID, BODY_TEMP_SENSOR_UUID]:
+            for sensor_uuid in [PULSE_SENSOR_UUID]:
                 if queue_manager[sensor_uuid].empty():
                     print(f"Adding data to queue for sensor with UUID {sensor_uuid}")
                     data = sensor_process.get_sensor_data(sensor_uuid)
