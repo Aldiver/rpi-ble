@@ -12,7 +12,6 @@ class PulseSensor():
         val4 = random.randint(1, 100)
         val4a = random.randint(1, 9)
         val5 = random.randint(1, 100)
-        val5a = random.randint(1, 9)
         val6 = random.randint(1, 100)
         val6a = random.randint(1, 9)
 
@@ -24,7 +23,6 @@ class PulseSensor():
         print("val4:", val4)
         print("val4a:", val4a)
         print("val5:", val5)
-        print("val5a:", val5a)
         print("val6:", val6)
         print("val6a:", val6a)
 
@@ -36,7 +34,6 @@ class PulseSensor():
         val4_bytes = val4.to_bytes(1, byteorder='big')
         val4a_bytes = val4a.to_bytes(1, byteorder='big')
         val5_bytes = val5.to_bytes(1, byteorder='big')
-        val5a_bytes = val5a.to_bytes(1, byteorder='big')
         val6_bytes = val6.to_bytes(1, byteorder='big')
         val6a_bytes = val6a.to_bytes(1, byteorder='big')
 
@@ -48,7 +45,6 @@ class PulseSensor():
         print("val4 bytes:", val4_bytes)
         print("val4a bytes:", val4a_bytes)
         print("val5 bytes:", val5_bytes)
-        print("val5a bytes:", val5a_bytes)
         print("val6 bytes:", val6_bytes)
         print("val6a bytes:", val6a_bytes)
 
@@ -60,9 +56,7 @@ class PulseSensor():
         byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
         byte_array.append(dbus.Byte(val4_bytes))
         byte_array.append(dbus.Byte(val4a_bytes))
-        byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
         byte_array.append(dbus.Byte(val5_bytes))
-        byte_array.append(dbus.Byte(val5a_bytes))
         byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
         byte_array.append(dbus.Byte(val6_bytes))
         byte_array.append(dbus.Byte(val6a_bytes))
