@@ -1,6 +1,6 @@
 import random
 import random
-import struct
+import dbus
 class PulseSensor():
     def __init__(self):
         self.pulse = 0
@@ -53,19 +53,19 @@ class PulseSensor():
         print("val6a bytes:", val6a_bytes)
 
         # Create byte array
-        byte_array = bytearray()
-        byte_array.extend(val1_bytes)
-        byte_array.extend(val2_bytes)
-        byte_array.extend(val3_bytes)
-        byte_array.extend(b'\x01')  # Insert byte > 0
-        byte_array.extend(val4_bytes)
-        byte_array.extend(val4a_bytes)
-        byte_array.extend(b'\x01')  # Insert byte > 0
-        byte_array.extend(val5_bytes)
-        byte_array.extend(val5a_bytes)
-        byte_array.extend(b'\x01')  # Insert byte > 0
-        byte_array.extend(val6_bytes)
-        byte_array.extend(val6a_bytes)
+        byte_array = dbus.Array([], signature=dbus.Signature("y"))
+        byte_array.append(val1_bytes)
+        byte_array.append(val2_bytes)
+        byte_array.append(val3_bytes)
+        byte_array.append(b'\x01')  # Insert byte > 0
+        byte_array.append(val4_bytes)
+        byte_array.append(val4a_bytes)
+        byte_array.append(b'\x01')  # Insert byte > 0
+        byte_array.append(val5_bytes)
+        byte_array.append(val5a_bytes)
+        byte_array.append(b'\x01')  # Insert byte > 0
+        byte_array.append(val6_bytes)
+        byte_array.append(val6a_bytes)
 
         # Print byte array
         print("\nByte array:")

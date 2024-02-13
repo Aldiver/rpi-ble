@@ -66,7 +66,7 @@ class BLEProcess(Process):
             bus=self._system_bus,
             index=0,
             adapter_obj=adapter_obj,
-            uuid="0000180d-aaaa-1000-8000-0081239b35fb",
+            uuid="00001810-aaaa-1000-8000-0081239b35fb",
             name="HEATGUARD",
         )
         # Create the application and add the service to it
