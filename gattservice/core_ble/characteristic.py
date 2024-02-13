@@ -58,7 +58,8 @@ class Characteristic(dbus.service.Object):
         except queue.Empty:
             return self.notifying
         
-        self.value = str_to_byte_arr(str(curr_value))
+        self.value = curr_value
+        # self.value = str_to_byte_arr(str(curr_value))
         self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.value}, [])
 
         return self.notifying
