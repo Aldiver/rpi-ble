@@ -68,3 +68,27 @@
   "descriptor": "tbd"
 }
 ```
+
+# Data
+
+val1 = random.randint(1, 100)
+val2 = random.randint(1, 100)
+val3 = random.randint(0, 2)
+val4 = random.randint(1, 100)
+val4a = random.randint(1, 9)
+val5 = random.randint(1, 100)
+val6 = random.randint(1, 100)
+val6a = random.randint(1, 9)
+
+from integer/float -> convert to Binary
+100 -> 1100100
+2 -> 10
+
+55.7 ->float
+55 -> separate whole number
+7 -> decimal
+55 + (7/10) = 55 + .7 = 55.7
+sending of floating point data
+
+Byte array:
+dbus.Array([dbus.Byte(46), dbus.Byte(60), dbus.Byte(0), dbus.Byte(1), dbus.Byte(55), dbus.Byte(7), dbus.Byte(73), dbus.Byte(1), dbus.Byte(68), dbus.Byte(5)], signature=dbus.Signature('y'))

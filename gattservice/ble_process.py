@@ -1,5 +1,4 @@
 import enum
-import queue
 from multiprocessing import Process, Manager
 from signal import SIGINT, SIGTERM, signal
 from typing import Any
@@ -12,7 +11,7 @@ from gi.repository import GLib
 
 from gattservice.core_ble.advertisement import Advertisement
 from gattservice.core_ble.application import Application
-from gattservice.core_ble.constants import ALERT_NOTIF_UUID, BLUEZ_SERVICE_NAME, BODY_TEMP_SENSOR_UUID, GATT_MANAGER_IFACE, GSR_SENSOR_UUID, PULSE_SENSOR_UUID, TEMP_HUMI_SENSOR_UUID
+from gattservice.core_ble.constants import ALERT_NOTIF_UUID, BLUEZ_SERVICE_NAME, GATT_MANAGER_IFACE, CHARACTERISTIC_SENSOR_UUID
 from gattservice.core_ble.service import Service
 from gattservice.exceptions import BluetoothNotFoundException
 from gattservice.util import find_adapter
@@ -81,19 +80,7 @@ class BLEProcess(Process):
         )
 
         Sensor_Service.add_characteristic(
-            PULSE_SENSOR_UUID, ["read", "notify"], "Pulse Characteristic", "Heart Rate", self.output_queue[PULSE_SENSOR_UUID]
-        )
-
-        Sensor_Service.add_characteristic(
-            BODY_TEMP_SENSOR_UUID, ["read", "notify"], "BodyTemp Characteristic", "35", self.output_queue[BODY_TEMP_SENSOR_UUID]
-        )
-
-        Sensor_Service.add_characteristic(
-            GSR_SENSOR_UUID, ["read", "notify"], "GSR Characteristic", "232", self.output_queue[GSR_SENSOR_UUID]
-        )        
-        
-        Sensor_Service.add_characteristic(
-            TEMP_HUMI_SENSOR_UUID, ["read", "notify"], "TempHumid Characteristic", "37", self.output_queue[TEMP_HUMI_SENSOR_UUID]
+            CHARACTERISTIC_SENSOR_UUID, ["read", "notify"], "Pulse Characteristic", "Heart Rate", self.output_queue[CHARACTERISTIC_SENSOR_UUID]
         )
 
         #Alert Service

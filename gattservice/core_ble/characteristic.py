@@ -58,9 +58,9 @@ class Characteristic(dbus.service.Object):
         except queue.Empty:
             return self.notifying
         
-        self.value = curr_value
+        self.value = curr_value #this line will get the value from the sensor
         # self.value = str_to_byte_arr(str(curr_value))
-        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.value}, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {"Value": self.value}, []) #updates characteristics
 
         return self.notifying
 
@@ -132,11 +132,12 @@ class Characteristic(dbus.service.Object):
         # self.output_queue.put({"uuid": self.uuid, "value": byte_arr_to_str(value)})
 
     @dbus.service.method(GATT_CHRC_IFACE)
-    def StartNotify(self):
-        if self.notifying:
+    def StartNotify(self): # eto yung reason ng nag uupdate ang value sa phone
+        if self.notifying: #Android Update
             return
 
         self.notifying = True
+        #Every 2 seconds, call input_queue_funtion
         self.notification_timeout_id = GObject.timeout_add(2000, self.input_queue_callback)
 
     @dbus.service.method(GATT_CHRC_IFACE)
