@@ -1,68 +1,47 @@
-import random
-import random
-import dbus
-class PulseSensor():
+import multiprocessing
+import Adafruit_ADS1x15
+import time
+
+class PulseSensor(multiprocessing.Process):
     def __init__(self):
+        super().__init__()
         self.pulse = 0
+        self.lastBeatTime = 0
+
+    def run(self):
+        CUSTOM_ADDRESS = 0x49  # Change this to your desired address
+        adc = Adafruit_ADS1x15.ADS1115(address=CUSTOM_ADDRESS)
+
+        firstBeat = True
+        secondBeat = False
+        sampleCounter = 0
+        lastTime = int(time.time()*1000)
+        th = 525
+
+        while True:
+            Signal = adc.read_adc(0, gain=2/3)
+            sampleCounter += int(time.time()*1000) - lastTime
+            lastTime = int(time.time()*1000)
+            N = sampleCounter - self.lastBeatTime
+
+            if Signal > th and Signal > self.pulse:
+                self.pulse = Signal
+            if Signal < th and N > 600:  # Adjust IBI duration as needed
+                if Signal < th:
+                    th = Signal
+            if N > 250:
+                if Signal > th and not secondBeat and N > 900:  # Adjust IBI threshold as needed
+                    secondBeat = True
+                    self.pulse = 60000 / (sampleCounter - self.lastBeatTime)
+                if firstBeat:
+                    firstBeat = False
+                    self.lastBeatTime = sampleCounter
+                    continue
+            if Signal < th and secondBeat:
+                th = 525
+                firstBeat = True
+                secondBeat = False
+            time.sleep(0.005)
 
     def get_data(self):
-        val1 = random.randint(1, 100)
-        val2 = random.randint(1, 100)
-        val3 = random.randint(0, 2)
-        val4 = random.randint(1, 100)
-        val4a = random.randint(1, 9)
-        val5 = random.randint(1, 100)
-        val6 = random.randint(1, 100)
-        val6a = random.randint(1, 9)
-
-        # Print the generated values
-        print("Random values:")
-        print("val1:", val1)
-        print("val2:", val2)
-        print("val3:", val3)
-        print("val4:", val4)
-        print("val4a:", val4a)
-        print("val5:", val5)
-        print("val6:", val6)
-        print("val6a:", val6a)
-
-
-        # Convert values to bytes
-        val1_bytes = val1.to_bytes(1, byteorder='big')
-        val2_bytes = val2.to_bytes(1, byteorder='big')
-        val3_bytes = val3.to_bytes(1, byteorder='big')
-        val4_bytes = val4.to_bytes(1, byteorder='big')
-        val4a_bytes = val4a.to_bytes(1, byteorder='big')
-        val5_bytes = val5.to_bytes(1, byteorder='big')
-        val6_bytes = val6.to_bytes(1, byteorder='big')
-        val6a_bytes = val6a.to_bytes(1, byteorder='big')
-
-        # Print bytes representation
-        print("\nBytes representation:")
-        print("val1 bytes:", val1_bytes)
-        print("val2 bytes:", val2_bytes)
-        print("val3 bytes:", val3_bytes)
-        print("val4 bytes:", val4_bytes)
-        print("val4a bytes:", val4a_bytes)
-        print("val5 bytes:", val5_bytes)
-        print("val6 bytes:", val6_bytes)
-        print("val6a bytes:", val6a_bytes)
-
-        # Create byte array
-        byte_array = dbus.Array([], signature=dbus.Signature("y"))
-        byte_array.append(dbus.Byte(val1_bytes))
-        byte_array.append(dbus.Byte(val2_bytes))
-        byte_array.append(dbus.Byte(val3_bytes))
-        byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
-        byte_array.append(dbus.Byte(val4_bytes))
-        byte_array.append(dbus.Byte(val4a_bytes))
-        byte_array.append(dbus.Byte(val5_bytes))
-        byte_array.append(dbus.Byte(b'\x01'))  # Insert byte > 0
-        byte_array.append(dbus.Byte(val6_bytes))
-        byte_array.append(dbus.Byte(val6a_bytes))
-
-        # Print byte array
-        print("\nByte array:")
-        print(byte_array)
-
-        return byte_array
+        return self.pulse
