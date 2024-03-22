@@ -138,7 +138,7 @@ class Characteristic(dbus.service.Object):
 
         self.notifying = True
         #Every 2 seconds, call input_queue_funtion
-        self.notification_timeout_id = GObject.timeout_add(2000, self.input_queue_callback)
+        self.notification_timeout_id = GObject.timeout_add(5000, self.input_queue_callback)
 
     @dbus.service.method(GATT_CHRC_IFACE)
     def StopNotify(self):

@@ -26,7 +26,7 @@ def register_app_error_cb(error):
 
 
 class BLEProcess(Process):
-    def __init__(self, output_queue: {}) -> None:
+    def __init__(self, output_queue: {}) -> None: # type: ignore
         super().__init__()
         self._system_bus = None
         self._mainloop = None
@@ -80,7 +80,7 @@ class BLEProcess(Process):
         )
 
         Sensor_Service.add_characteristic(
-            CHARACTERISTIC_SENSOR_UUID, ["read", "notify"], "Pulse Characteristic", "Heart Rate", self.output_queue[CHARACTERISTIC_SENSOR_UUID]
+            CHARACTERISTIC_SENSOR_UUID, ["read", "notify"], "Sensors Characteristic", "Default", self.output_queue[CHARACTERISTIC_SENSOR_UUID]
         )
 
         #Alert Service
