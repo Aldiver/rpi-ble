@@ -16,7 +16,7 @@ class SensorProcess():
         # Start the PulseSensor process
         self.pulse_sensor.start()
 
-    def get_sensor_data(self, sensor_uuid):
+    def get_sensor_data(self):
         self.byte_array = dbus.Array([], signature=dbus.Signature("y")) #reset byte array
 
         # Get sensor data
