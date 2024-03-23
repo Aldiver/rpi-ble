@@ -25,14 +25,16 @@ class SensorProcess():
 
         # Get sensor data
         heartRate = 0
-        try:
-            heartRate = self.pulse_queue.get(False)
-            print("Check Heart Rate :", heartRate)
-        except queue.Empty:
-            print("no data reading pulse rate")
+        if not self.pulse_queue.empty():
+            heartRate = self.pulse_queue.get()
+            print("Check Heart Rate:", heartRate)
+        else:
+            print("No data reading pulse rate")
             heartRate = 0
 
         self.append_to_dbus_array(heartRate)
+
+
         skinRes = self.gsr_sensor.get_data()
         self.append_to_dbus_array(skinRes)
 
