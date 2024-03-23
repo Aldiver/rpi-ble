@@ -26,7 +26,8 @@ class SensorProcess():
         # Get sensor data
         heartRate = 0
         try:
-            heartRate = self.pulse_queue.get(timeout=1)
+            heartRate = self.pulse_queue.get(False)
+            print("Check Heart Rate :", heartRate)
         except queue.Empty:
             heartRate = 0
 
