@@ -35,7 +35,7 @@ class SensorProcess():
         ambientTempData = self.temp_humi_sensor.get_temperature_data()
         self.parse_decimal(ambientTempData)
 
-        return None
+        return self.byte_array
         
     def get_sensor_data_test(self):
         byte1 = random.randint(1, 100) #value for heart rate
