@@ -62,6 +62,7 @@ class PulseSensor(multiprocessing.Process):
                     print("BPM:", BPM)
                     # print("IBI:", IBI)
                     if not self.output_queue.empty():
+                        print(" ADDING PULSE DATA TO QUEUE")
                         self.output_queue.put(round(BPM))
 
             if Signal < th and Pulse:
