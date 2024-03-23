@@ -59,7 +59,7 @@ class PulseSensor(multiprocessing.Process):
                     runningTotal /= 10
                     BPM = 60000/runningTotal
                     print("BPM:", BPM)
-                    print("IBI:", IBI)
+                    # print("IBI:", IBI)
                     self.pulse = round(BPM)
 
             if Signal < th and Pulse:
@@ -76,8 +76,9 @@ class PulseSensor(multiprocessing.Process):
                 firstBeat = False
                 secondBeat = False
                 print("No beats found")
-                self.pulse = 0
+                # self.pulse = 0
             time.sleep(0.005)
 
     def get_data(self):
+        print("PULSE IS: ", self.pulse)
         return self.pulse
