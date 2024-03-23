@@ -9,6 +9,7 @@ class GSRSensor:
         try:
             # Read analog input from the GSR sensor connected to the specified channel
             gsr_value = self.adc.read_adc(self.channel, gain=1, data_rate=8)  # Set data rate to 3300 SPS
+            print("GSR VALUE: " + gsr_value)
             return gsr_value
         except Exception as e:
             print("Error reading GSR:", e)
@@ -25,11 +26,3 @@ class GSRSensor:
         gsr_value = self.read_gsr()
         skin_resistance = self.adjust_skin_resistance(gsr_value)
         return skin_resistance
-
-# Example usage:
-if __name__ == '__main__':
-    gsr_sensor = GSRSensor()
-    while True:
-        skin_resistance = gsr_sensor.get_data()
-        print("Skin Resistance:", skin_resistance)
-        time.sleep(0.5)  # Adjust sampling interval as needed
