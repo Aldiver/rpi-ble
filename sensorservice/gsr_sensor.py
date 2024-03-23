@@ -1,5 +1,4 @@
 import Adafruit_ADS1x15
-import time
 
 class GSRSensor:
     def __init__(self, address=0x49, channel=0):
@@ -15,5 +14,22 @@ class GSRSensor:
             print("Error reading GSR:", e)
             return 0
 
+    def adjust_skin_resistance(self, gsr_value):
+        # Adjust skin resistance based on the GSR value
+        if gsr_value > 9000:
+            return 1
+        else:
+            return 0
+
     def get_data(self):
-        return self.read_gsr()
+        gsr_value = self.read_gsr()
+        skin_resistance = self.adjust_skin_resistance(gsr_value)
+        return skin_resistance
+
+# Example usage:
+if __name__ == '__main__':
+    gsr_sensor = GSRSensor()
+    while True:
+        skin_resistance = gsr_sensor.get_data()
+        print("Skin Resistance:", skin_resistance)
+        time.sleep(0.5)  # Adjust sampling interval as needed
