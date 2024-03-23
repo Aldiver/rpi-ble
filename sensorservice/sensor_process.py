@@ -26,7 +26,7 @@ class SensorProcess():
         skinRes = self.gsr_sensor.get_data()
         self.append_to_dbus_array(skinRes)
 
-        skinTempData = self.body_temp_sensor.get_temperature_data()
+        skinTempData = self.body_temp_sensor.read_temperature()
         self.parse_decimal(skinTempData)
 
         ambientHumidity = self.temp_humi_sensor.get_humidity_data()
