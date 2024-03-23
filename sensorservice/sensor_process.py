@@ -1,5 +1,5 @@
 from sensorservice.temp_humi_sensor import TempHumiSensor
-from sensorservice.gsr_sensor import GsrSensor
+from sensorservice.gsr_sensor import GSRSensor
 from sensorservice.pulse_sensor import PulseSensor
 from sensorservice.body_temp_sensor import BodyTempSensor
 import random
@@ -8,7 +8,7 @@ import dbus
 
 class SensorProcess():
     def __init__(self):
-        self.gsr_sensor = GsrSensor()
+        self.gsr_sensor = GSRSensor()
         self.pulse_sensor = PulseSensor()
         self.temp_humi_sensor = TempHumiSensor()
         self.body_temp_sensor = BodyTempSensor()
