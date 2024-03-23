@@ -1,3 +1,5 @@
+import multiprocessing
+import queue
 from sensorservice.temp_humi_sensor import TempHumiSensor
 from sensorservice.gsr_sensor import GSRSensor
 from sensorservice.pulse_sensor import PulseSensor
@@ -9,20 +11,26 @@ import dbus
 class SensorProcess():
     def __init__(self):
         self.gsr_sensor = GSRSensor()
-        self.pulse_sensor = PulseSensor()
+        
         self.temp_humi_sensor = TempHumiSensor()
         self.body_temp_sensor = BodyTempSensor()
         self.byte_array = dbus.Array([], signature=dbus.Signature("y"))
         # Start the PulseSensor process
+        self.pulse_queue = multiprocessing.Queue()
+        self.pulse_sensor = PulseSensor(self.pulse_queue)
         self.pulse_sensor.start()
 
     def get_sensor_data(self):
         self.byte_array = dbus.Array([], signature=dbus.Signature("y")) #reset byte array
 
         # Get sensor data
-        heartRate = self.pulse_sensor.get_data()
-        self.append_to_dbus_array(heartRate)
+        heartRate = 0
+        try:
+            heartRate = self.pulse_queue.get(timeout=1)
+        except queue.Empty:
+            heartRate = 0
 
+        self.append_to_dbus_array(heartRate)
         skinRes = self.gsr_sensor.get_data()
         self.append_to_dbus_array(skinRes)
 

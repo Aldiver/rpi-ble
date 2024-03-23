@@ -3,9 +3,10 @@ import Adafruit_ADS1x15
 import time
 
 class PulseSensor(multiprocessing.Process):
-    def __init__(self):
+    def __init__(self, output_queue):
         super().__init__()
         self.pulse = 0
+        self.output_queue = output_queue
 
     def run(self):
         CUSTOM_ADDRESS = 0x49  # Change this to your desired address
@@ -60,6 +61,10 @@ class PulseSensor(multiprocessing.Process):
                     BPM = 60000/runningTotal
                     print("BPM:", BPM)
                     # print("IBI:", IBI)
+                    if not self.output_queue.empty():
+                    # Queue is not empty, put data into it
+                        self.output_queue.put(BPM)
+
                     self.pulse = round(BPM)
 
             if Signal < th and Pulse:
@@ -80,5 +85,4 @@ class PulseSensor(multiprocessing.Process):
             time.sleep(0.005)
 
     def get_data(self):
-        print("PULSE IS: ", self.pulse)
         return self.pulse
