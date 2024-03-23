@@ -19,7 +19,7 @@ class PulseSensor(multiprocessing.Process):
         th = 525
 
         while True:
-            Signal = adc.read_adc(0, gain=2/3)
+            Signal = adc.read_adc(1, gain=2/3)
             sampleCounter += int(time.time()*1000) - lastTime
             lastTime = int(time.time()*1000)
             N = sampleCounter - self.lastBeatTime
