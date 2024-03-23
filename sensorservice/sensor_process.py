@@ -29,6 +29,7 @@ class SensorProcess():
             heartRate = self.pulse_queue.get(False)
             print("Check Heart Rate :", heartRate)
         except queue.Empty:
+            print("no data reading pulse rate")
             heartRate = 0
 
         self.append_to_dbus_array(heartRate)

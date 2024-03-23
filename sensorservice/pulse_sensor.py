@@ -3,7 +3,7 @@ import Adafruit_ADS1x15
 import time
 
 class PulseSensor(multiprocessing.Process):
-    def __init__(self, output_queue):
+    def __init__(self, output_queue: multiprocessing.Queue):
         super().__init__()
         self.pulse = 0
         self.output_queue = output_queue
@@ -61,7 +61,7 @@ class PulseSensor(multiprocessing.Process):
                     BPM = 60000/runningTotal
                     print("BPM:", BPM)
                     # print("IBI:", IBI)
-                    if not self.output_queue.empty():
+                    if self.output_queue.empty():
                         print(" ADDING PULSE DATA TO QUEUE")
                         self.output_queue.put(round(BPM))
 
