@@ -58,8 +58,8 @@ class PulseSensor(multiprocessing.Process):
                     runningTotal += rate[9]
                     runningTotal /= 10
                     BPM = 60000/runningTotal
-                    # print("BPM:", BPM)
-                    # print("IBI:", IBI)
+                    print("BPM:", BPM)
+                    print("IBI:", IBI)
                     self.pulse = round(BPM)
 
             if Signal < th and Pulse:
@@ -75,7 +75,7 @@ class PulseSensor(multiprocessing.Process):
                 lastBeatTime = sampleCounter
                 firstBeat = False
                 secondBeat = False
-                # print("No beats found")
+                print("No beats found")
                 self.pulse = 0
             time.sleep(0.005)
 
