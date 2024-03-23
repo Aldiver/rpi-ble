@@ -30,10 +30,11 @@ def main():
         if time.time() - start_time >= 5:
             start_time = time.time()  # Reset the timer
 
+                #if prev. reading not sent = no data update
             if queue_manager[CHARACTERISTIC_SENSOR_UUID].empty():
                 print(f"Adding data to queue for sensor with UUID {CHARACTERISTIC_SENSOR_UUID}")
                 # Call function to get sensor data and put it into the queue
-                data = sensor_process.get_sensor_data_test()
+                data = sensor_process.get_sensor_data()
                 queue_manager[CHARACTERISTIC_SENSOR_UUID].put(data)
 
         time.sleep(0.1)  # Sleep for a short duration to avoid high CPU usage

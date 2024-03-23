@@ -94,3 +94,6 @@ class SensorProcess():
     
     def append_to_dbus_array(self, value):
         self.byte_array.append(dbus.Byte(value.to_bytes(1, byteorder='big')))
+
+
+# -37.5 === (-), (37), (5)
