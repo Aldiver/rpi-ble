@@ -9,7 +9,7 @@ class GSRSensor:
         try:
             # Read analog input from the GSR sensor connected to the specified channel
             gsr_value = self.adc.read_adc(self.channel, gain=1, data_rate=8)  # Set data rate to 3300 SPS
-            print("GSR VALUE: " + gsr_value)
+            print("GSR VALUE: ", gsr_value)
             return gsr_value
         except Exception as e:
             print("Error reading GSR:", e)
