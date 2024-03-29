@@ -13,11 +13,12 @@ from sensorservice.sensor_process import SensorProcess
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 queue_manager = {}
-sensor_process = SensorProcess()
 queue_manager[CHARACTERISTIC_SENSOR_UUID] = multiprocessing.Queue()
 queue_manager[ALERT_NOTIF_UUID] = multiprocessing.Queue()
+queue_manager["pulse"] = multiprocessing.Queue()
 
 def main():
+    sensor_process = SensorProcess(queue_manager["pulse"])
     ble_process = BLEProcess(queue_manager)
     ble_process.start()
     

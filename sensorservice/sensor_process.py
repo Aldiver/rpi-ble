@@ -9,14 +9,14 @@ import dbus
 
 
 class SensorProcess():
-    def __init__(self):
+    def __init__(self, pulse_queue ):
         self.gsr_sensor = GSRSensor()
         
         self.temp_humi_sensor = TempHumiSensor()
         self.body_temp_sensor = BodyTempSensor()
         self.byte_array = dbus.Array([], signature=dbus.Signature("y"))
         # Start the PulseSensor process
-        self.pulse_queue = multiprocessing.Queue()
+        self.pulse_queue = pulse_queue
         self.pulse_sensor = PulseSensor(self.pulse_queue)
         self.pulse_sensor.start()
 
@@ -25,15 +25,10 @@ class SensorProcess():
 
         # Get sensor data
         heartRate = 0
-        if not self.pulse_queue.empty():
-            heartRate = self.pulse_queue.get()
-            print("Check Heart Rate:", heartRate)
-        else:
-            print("No data reading pulse rate")
-            heartRate = 0
+        heartRate = self.pulse_queue.get()
+        print("Check Heart Rate:", heartRate)
 
         self.append_to_dbus_array(heartRate)
-
 
         skinRes = self.gsr_sensor.get_data()
         self.append_to_dbus_array(skinRes)
