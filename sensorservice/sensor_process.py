@@ -28,7 +28,7 @@ class SensorProcess():
         heartRate = self.pulse_queue.get()
         print("Check Heart Rate:", heartRate)
 
-        self.append_to_dbus_array(heartRate)
+        self.append_to_dbus_array(min(heartRate, 208))
 
         skinRes = self.gsr_sensor.get_data()
         self.append_to_dbus_array(skinRes)
