@@ -19,7 +19,7 @@ class AlertProcess(multiprocessing.Process):
                 alert = self.alert_queue.get()
                 if alert == "1":
                     print("Alert received! Starting beep process...")
-                    self.start_beeping()
+                    self.start_pulsating_beep()
                 elif alert == "0":
                     print("Received stop signal for beeping.")
                     self.stop_beeping()
