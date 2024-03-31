@@ -27,10 +27,12 @@ class AlertProcess(multiprocessing.Process):
                     print(f"Unknown alert value received: {alert}")
             time.sleep(0.1)  # Adjust sleep time as needed
 
-    def start_beeping(self):
-        # Start beeping by toggling the GPIO pin
-        GPIO.output(self.speaker_pin, GPIO.HIGH)
+    def start_pulsating_beep(self):
+        # Start pulsating beep using PWM
+        pwm = GPIO.PWM(self.speaker_pin, 1000)  # Frequency 1000 Hz
+        pwm.start(50)  # 50% duty cycle (initially half-on)
         time.sleep(5)  # Beep for 5 seconds
+        pwm.stop()  # Stop PWM
 
     def stop_beeping(self):
         # Stop beeping by turning off the GPIO pin
