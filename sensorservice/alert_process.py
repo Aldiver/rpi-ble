@@ -6,7 +6,7 @@ class AlertProcess(multiprocessing.Process):
     def __init__(self, alert_queue):
         super().__init__()
         self.alert_queue = alert_queue
-        self.speaker_pin = 17  # GPIO pin connected to the speaker
+        self.speaker_pin = 4  # GPIO pin connected to the speaker
 
         # Setup GPIO
         GPIO.setmode(GPIO.BCM)
