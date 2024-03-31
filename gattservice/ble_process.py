@@ -82,20 +82,19 @@ class BLEProcess(Process):
         Sensor_Service.add_characteristic(
             CHARACTERISTIC_SENSOR_UUID, ["read", "notify"], "Sensors Characteristic", "Default", self.output_queue[CHARACTERISTIC_SENSOR_UUID]
         )
-
-        #Alert Service
-        Rasp_Service = Service(
-            bus=self._system_bus,
-            index=1,
-            uuid="00001811-0000-1000-8000-00123f9b34fb",
-            primary=True,
-        )
-        Rasp_Service.add_characteristic(
+        Sensor_Service.add_characteristic(
             ALERT_NOTIF_UUID, ["write", "notify"], "Alert Characteristic", "", self.output_queue[ALERT_NOTIF_UUID]
         )
-
+        #Alert Service
+        # Rasp_Service = Service(
+        #     bus=self._system_bus,
+        #     index=1,
+        #     uuid="00001812-0000-1000-8000-00123f9b34fb",
+        #     primary=True,
+        # )
+        
         app.add_service(Sensor_Service)
-        app.add_service(Rasp_Service)
+        # app.add_service(Rasp_Service)
 
         # Initialise the advertisement
         self._advertisement.init_advertisement()
