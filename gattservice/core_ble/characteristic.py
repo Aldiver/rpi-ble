@@ -130,7 +130,7 @@ class Characteristic(dbus.service.Object):
         """
         self.value = value
         self.input_queue.put(byte_arr_to_str(value))
-        print("someone had an hs")
+        # print("someone had an hs")
 
     @dbus.service.method(GATT_CHRC_IFACE)
     def StartNotify(self): # eto yung reason ng nag uupdate ang value sa phone

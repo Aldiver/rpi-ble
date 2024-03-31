@@ -17,10 +17,10 @@ class AlertProcess(multiprocessing.Process):
         while True:  # Continuously monitor the alert queue
             if not self.alert_queue.empty():
                 alert = self.alert_queue.get()
-                if alert == 1:
+                if alert == "1":
                     print("Alert received! Starting beep process...")
                     self.start_beeping()
-                elif alert == 0:
+                elif alert == "0":
                     print("Received stop signal for beeping.")
                     self.stop_beeping()
                 else:
