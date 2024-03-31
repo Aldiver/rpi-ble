@@ -28,11 +28,11 @@ class AlertProcess(multiprocessing.Process):
             time.sleep(0.1)  # Adjust sleep time as needed
 
     def start_pulsating_beep(self):
-        # Start pulsating beep using PWM
-        pwm = GPIO.PWM(self.speaker_pin, 1000)  # Frequency 1000 Hz
-        pwm.start(50)  # 50% duty cycle (initially half-on)
-        time.sleep(5)  # Beep for 5 seconds
-        pwm.stop()  # Stop PWM
+        for _ in range(5):  # 5 cycles of beep and silence
+            GPIO.output(self.speaker_pin, GPIO.HIGH)  # Turn on the speaker
+            time.sleep(1)  # Beep for 1 second
+            GPIO.output(self.speaker_pin, GPIO.LOW)  # Turn off the speaker
+            time.sleep(1)  # Silence for 1 second
 
     def stop_beeping(self):
         # Stop beeping by turning off the GPIO pin
