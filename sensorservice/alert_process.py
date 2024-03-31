@@ -6,12 +6,13 @@ class AlertProcess(multiprocessing.Process):
     def __init__(self, alert_queue):
         super().__init__()
         self.alert_queue = alert_queue
-        self.speaker_pin = 4  # GPIO pin connected to the speaker
+        self.speaker_pin = 17  # GPIO pin connected to the speaker
 
         # Setup GPIO
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.speaker_pin, GPIO.OUT)
         GPIO.output(self.speaker_pin, GPIO.LOW)
+        self.start_pulsating_beep()
 
     def run(self):
         while True:  # Continuously monitor the alert queue
