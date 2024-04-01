@@ -25,7 +25,7 @@ def read_pulse():
     IBI = 600
     Pulse = False  
     while True:
-        Signal = adc.read_adc(0, gain=GAIN)   
+        Signal = adc.read_adc(1, gain=GAIN)   
         sampleCounter += int(time.time()*1000) - lastTime
         lastTime = int(time.time()*1000)
         N = sampleCounter - lastBeatTime
