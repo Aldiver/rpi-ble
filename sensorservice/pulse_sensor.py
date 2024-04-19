@@ -7,6 +7,8 @@ class PulseSensor(multiprocessing.Process):
         super().__init__()
         self.pulse = 0
         self.output_queue = output_queue
+        self.filter_window = 5  # Adjust this value to change the window size of the moving average filter
+        self.signal_buffer = deque(maxlen=self.filter_window)  # Using deque to efficiently maintain the moving window
 
     def run(self):
         CUSTOM_ADDRESS = 0x49  # Change this to your desired address
@@ -27,19 +29,23 @@ class PulseSensor(multiprocessing.Process):
         T = 512
         IBI = 600
         Pulse = False  
+        
         while True:
             Signal = adc.read_adc(1, gain=GAIN)   
+            self.signal_buffer.append(Signal)  # Add the current signal reading to the buffer
+            filtered_signal = sum(self.signal_buffer) / len(self.signal_buffer)  # Calculate the moving average
+
             sampleCounter += int(time.time()*1000) - lastTime
             lastTime = int(time.time()*1000)
             N = sampleCounter - lastBeatTime
 
-            if Signal > th and Signal > P:
-                P = Signal
-            if Signal < th and N > (IBI/5.0)*3.0:
-                if Signal < T:
-                    T = Signal
+            if filtered_signal > th and filtered_signal > P:
+                P = filtered_signal
+            if filtered_signal < th and N > (IBI/5.0)*3.0:
+                if filtered_signal < T:
+                    T = filtered_signal
             if N > 250:
-                if Signal > th and Pulse == False and N > (IBI/5.0)*3.0:
+                if filtered_signal > th and Pulse == False and N > (IBI/5.0)*3.0:
                     Pulse = True
                     IBI = sampleCounter - lastBeatTime
                     lastBeatTime = sampleCounter
@@ -60,12 +66,11 @@ class PulseSensor(multiprocessing.Process):
                     runningTotal /= 10
                     BPM = 60000/runningTotal
                     print("BPM:", BPM)
-                    # print("IBI:", IBI)
                     if self.output_queue.empty():
-                        print(" ADDING PULSE DATA TO QUEUE")
+                        print("ADDING PULSE DATA TO QUEUE")
                         self.output_queue.put(round(BPM))
 
-            if Signal < th and Pulse:
+            if filtered_signal < th and Pulse:
                 amp = P - T
                 th = amp/2 + T
                 T = th
@@ -79,7 +84,6 @@ class PulseSensor(multiprocessing.Process):
                 firstBeat = False
                 secondBeat = False
                 print("No beats found")
-                # self.pulse = 0
             time.sleep(0.005)
 
     def get_data(self):
