@@ -1,22 +1,14 @@
-
 from sensorservice.max30102 import MAX30102
-import sensorservice.hrcalc
+import sensorservice.hrcalc as hrcalc
 import threading
 import time
 import numpy as np
 
-
 class HeartRateMonitor(object):
-    """
-    A class that encapsulates the max30102 device into a thread
-    """
-
     LOOP_TIME = 0.01
 
     def __init__(self, print_raw=False, print_result=False):
         self.bpm = 0
-        if print_raw is True:
-            print('IR, Red')
         self.print_raw = print_raw
         self.print_result = print_result
 
@@ -26,12 +18,9 @@ class HeartRateMonitor(object):
         red_data = []
         bpms = []
 
-        # run until told to stop
         while not self._thread.stopped:
-            # check if any data is available
             num_bytes = sensor.get_data_present()
             if num_bytes > 0:
-                # grab all the data and stash it into arrays
                 while num_bytes > 0:
                     red, ir = sensor.read_fifo()
                     num_bytes -= 1
@@ -51,7 +40,7 @@ class HeartRateMonitor(object):
                         while len(bpms) > 4:
                             bpms.pop(0)
                         self.bpm = np.mean(bpms)
-                        if (np.mean(ir_data) < 50000 and np.mean(red_data) < 50000):
+                        if np.mean(ir_data) < 50000 and np.mean(red_data) < 50000:
                             self.bpm = 0
                             if self.print_result:
                                 print("Finger not detected")
@@ -71,3 +60,6 @@ class HeartRateMonitor(object):
         self._thread.stopped = True
         self.bpm = 0
         self._thread.join(timeout)
+
+    def get_heart_rate(self):
+        return self.bpm
