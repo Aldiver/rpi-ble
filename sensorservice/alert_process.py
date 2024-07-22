@@ -12,7 +12,7 @@ class AlertProcess(multiprocessing.Process):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.speaker_pin, GPIO.OUT)
         self.pwm = GPIO.PWM(self.speaker_pin, 1000)  # Set PWM frequency to 1kHz
-        self.pwm.start(0)  # Start PWM with 0% duty cycle (off)
+        self.pwm.start(0.5)  # Start PWM with 0% duty cycle (off)
         
     def run(self):
         while True:  # Continuously monitor the alert queue
