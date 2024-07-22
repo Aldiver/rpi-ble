@@ -9,12 +9,12 @@ import dbus
 
 
 class SensorProcess():
-    def __init__(self, pulse_queue ):
+    def __init__(self, pulse_queue):
         self.gsr_sensor = GSRSensor()
-        
         self.temp_humi_sensor = TempHumiSensor()
         self.body_temp_sensor = BodyTempSensor()
         self.byte_array = dbus.Array([], signature=dbus.Signature("y"))
+        
         # Start the PulseSensor process
         self.pulse_queue = pulse_queue
         self.pulse_sensor = PulseSensor(self.pulse_queue)
@@ -22,7 +22,7 @@ class SensorProcess():
         self.heartRate = 0
 
     def get_sensor_data(self):
-        self.byte_array = dbus.Array([], signature=dbus.Signature("y")) #reset byte array
+        self.byte_array = dbus.Array([], signature=dbus.Signature("y"))  # reset byte array
 
         # Get sensor data
         heartRate = 0
