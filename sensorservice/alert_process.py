@@ -43,16 +43,3 @@ class AlertProcess(multiprocessing.Process):
         # Cleanup GPIO and stop PWM
         self.pwm.stop()
         GPIO.cleanup()
-
-# Example usage
-if __name__ == '__main__':
-    alert_queue = multiprocessing.Queue()
-    alert_process = AlertProcess(alert_queue)
-    alert_process.start()
-
-    # Example to trigger alert
-    alert_queue.put("1")
-    time.sleep(10)
-    alert_queue.put("0")
-
-    alert_process.cleanup()
