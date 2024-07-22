@@ -2,7 +2,7 @@ import smbus
 import time
 
 class BodyTempSensor:
-    def __init__(self, address=0x4c):
+    def __init__(self, address=0x4e):
         self.address = address
         self.bus = smbus.SMBus(1)  # Use I2C bus 1
 

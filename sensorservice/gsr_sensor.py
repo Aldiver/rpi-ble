@@ -1,7 +1,7 @@
 import Adafruit_ADS1x15
 
 class GSRSensor:
-    def __init__(self, address=0x49, channel=0):
+    def __init__(self, address=0x4a, channel=0):
         self.adc = Adafruit_ADS1x15.ADS1115(address=address)
         self.channel = channel
 
@@ -17,7 +17,7 @@ class GSRSensor:
 
     def adjust_skin_resistance(self, gsr_value):
         # Adjust skin resistance based on the GSR value
-        if gsr_value > 9000:
+        if gsr_value > 21000:
             return 1
         else:
             return 0

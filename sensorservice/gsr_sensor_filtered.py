@@ -2,7 +2,7 @@ import Adafruit_ADS1x15
 from sensorservice.filter_util import MovingAverageFilter
 
 class GSRSensor:
-    def __init__(self, address=0x49, channel=0, filter_window_size=5):
+    def __init__(self, address=0x4a, channel=0, filter_window_size=5):
         self.adc = Adafruit_ADS1x15.ADS1115(address=address)
         self.channel = channel
         self.filter = MovingAverageFilter(window_size=filter_window_size)
@@ -18,7 +18,7 @@ class GSRSensor:
 
     def adjust_skin_resistance(self, gsr_value):
         # Adjust skin resistance based on the GSR value
-        if gsr_value > 9000:
+        if gsr_value > 21000:
             return 1
         else:
             return 0
