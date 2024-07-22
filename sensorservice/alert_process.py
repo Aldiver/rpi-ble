@@ -12,21 +12,24 @@ class AlertProcess(multiprocessing.Process):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.speaker_pin, GPIO.OUT)
         self.pwm = GPIO.PWM(self.speaker_pin, 1000)  # Set PWM frequency to 1kHz
-        self.pwm.start(0.5)  # Start PWM with 0% duty cycle (off)
+        self.pwm.start(0)  # Start PWM with 0% duty cycle (off)
         
     def run(self):
-        while True:  # Continuously monitor the alert queue
-            if not self.alert_queue.empty():
-                alert = self.alert_queue.get()
-                if alert == "1":
-                    print("Alert received! Starting beep process...")
-                    self.start_pulsating_beep(5)
-                elif alert == "0":
-                    print("Received stop signal for beeping.")
-                    self.stop_beeping()
-                else:
-                    print(f"Unknown alert value received: {alert}")
-            time.sleep(0.1)  # Adjust sleep time as needed
+        try:
+            while True:  # Continuously monitor the alert queue
+                if not self.alert_queue.empty():
+                    alert = self.alert_queue.get()
+                    if alert == "1":
+                        print("Alert received! Starting beep process...")
+                        self.start_pulsating_beep(5)
+                    elif alert == "0":
+                        print("Received stop signal for beeping.")
+                        self.stop_beeping()
+                    else:
+                        print(f"Unknown alert value received: {alert}")
+                time.sleep(0.1)  # Adjust sleep time as needed
+        finally:
+            self.cleanup()
 
     def start_pulsating_beep(self, cycles: int):
         for _ in range(cycles):  # Number of cycles of beep and silence
