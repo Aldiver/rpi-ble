@@ -44,8 +44,8 @@ class HeartRateMonitor(object):
                             self.bpm = 0
                             if self.print_result:
                                 print("Finger not detected")
-                        if self.print_result:
-                            print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
+                        # if self.print_result:
+                        #     print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
 
             time.sleep(self.LOOP_TIME)
 
