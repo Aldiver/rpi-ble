@@ -1,5 +1,5 @@
 import multiprocessing
-from heartrate_monitor import HeartRateMonitor
+from sensorservice.heartrate_monitor import HeartRateMonitor
 import time
 
 class PulseSensor(multiprocessing.Process):
