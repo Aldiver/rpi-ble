@@ -39,7 +39,7 @@ class HeartRateMonitor(object):
                         bpms.append(bpm)
                         while len(bpms) > 4:
                             bpms.pop(0)
-                        self.bpm = np.mean(bpms)
+                        self.bpm = float(np.mean(bpms))
                         if np.mean(ir_data) < 50000 and np.mean(red_data) < 50000:
                             self.bpm = 0
                             if self.print_result:
