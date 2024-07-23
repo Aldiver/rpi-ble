@@ -42,10 +42,10 @@ class HeartRateMonitor(object):
                         self.bpm = np.mean(bpms)
                         if np.mean(ir_data) < 50000 and np.mean(red_data) < 50000:
                             self.bpm = 0
-                        #     if self.print_result:
-                        #         print("Finger not detected")
-                        # if self.print_result:
-                        #     print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
+                            if self.print_result:
+                                print("Finger not detected")
+                        if self.print_result:
+                            print("BPM: {0}, SpO2: {1}".format(self.bpm, spo2))
 
             time.sleep(self.LOOP_TIME + 0.2)  # Add 200 ms delay
 
