@@ -18,18 +18,18 @@ class SensorProcess():
         # Start the PulseSensor process
         self.pulse_queue = pulse_queue
         self.pulse_sensor = PulseSensor(self.pulse_queue)
-        # self.pulse_sensor.start()
+        self.pulse_sensor.start()
         self.heartRate = 0
 
     def get_sensor_data(self):
         self.byte_array = dbus.Array([], signature=dbus.Signature("y"))  # reset byte array
 
         # Get sensor data
-        # heartRate = 0
-        # if not self.pulse_queue.empty():
-        #     self.heartRate = self.pulse_queue.get()
+        heartRate = 0
+        if not self.pulse_queue.empty():
+            self.heartRate = self.pulse_queue.get()
         
-        # print("Check Heart Rate:", self.heartRate)
+        print("Check Heart Rate:", self.heartRate)
 
         self.append_to_dbus_array(min(self.heartRate, 208))
 

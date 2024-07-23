@@ -1,5 +1,4 @@
 import smbus
-import time
 
 class BodyTempSensor:
     def __init__(self, address=0x4e):
@@ -14,6 +13,7 @@ class BodyTempSensor:
             # Convert temperature data to Celsius
             temperature = ((data[0] << 8) + data[1]) / 256.0
             
+            print("Body temperature ", temperature)
             return temperature
         except Exception as e:
             print("Error reading temperature:", e)
